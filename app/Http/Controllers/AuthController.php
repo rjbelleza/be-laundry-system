@@ -52,14 +52,29 @@ class AuthController extends Controller
         ]); 
         
         if ($validator->fails()) { 
+            Log::error('Registration validation failed', ['errors' => $validator->errors()]); 
             return response()->json($validator->errors(), 400); 
         } 
         
-        $user = User::create([ 
-            'name' => $request->name, 
-            'email' => $request->email, 
-            'password' => Hash::make($request->password), 
-        ]); 
-        
-        return response()->json(['message' => 'User created successfully', 'user' => $user], 201); }
+        try { 
+            $user = User::create([ 
+                'name' => $request->name, 
+                'email' => $request->email, 
+                'password' => Hash::make($request->password), 
+            ]); 
+            
+            if ($user) { 
+                Log::info('User created successfully', ['user' => $user]); 
+            } else { 
+                Log::error('User creation failed', ['data' => $request->all()]); 
+            } 
+            
+            return response()->json(['message' => 'User created successfully', 'user' => $user], 201); 
+        } catch (\Exception $e) { 
+            Log::error('Error occurred during user registration', ['exception' => $e]); 
+            return response()->json(['message' => 'Error occurred during user registration'], 500); 
+        } 
+    }
+
 }
+
