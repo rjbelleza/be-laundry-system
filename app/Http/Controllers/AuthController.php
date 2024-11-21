@@ -43,36 +43,43 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out'], 200);
     }
 
-    public function register(Request $request) { 
-        $validator = Validator::make($request->all(), [ 
-            'name' => 'required|string|max:255', 
-            'email' => 'required|string|email|max:255|unique:users', 
-            'password' => 'required|string|min:8', 
-            'address' => 'required|string|max:255', 
-            'mobile' => 'required|digits:11', // Validate exactly 11 digits 
-            'postal_code' => 'required|digits:11', // Validate exactly 11 digits 
-        ]); 
-        
-        if ($validator->fails()) { 
-            Log::error('Registration validation failed', ['errors' => $validator->errors()]); 
-            return response()->json($validator->errors(), 400); 
-        } 
-        
-        try { 
-            $user = User::create([ 
-                'name' => $request->name, 
-                'email' => $request->email, 
-                'password' => Hash::make($request->password), 
-                'address' => $request->address, 
-                'mobile' => $request->mobile, 
-                'postal_code' => $request->postal_code, 
-            ]); 
-            
-            return response()->json(['message' => 'User created successfully', 'user' => $user], 201); 
-        } catch (\Exception $e) { 
-            Log::error('Error occurred during user registration', ['exception' => $e]); 
-            return response()->json(['message' => 'Error occurred during user registration'], 500); 
-        } 
+    public function register(Request $request)
+{
+    Log::info('Request Data:', $request->all());
+
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8',
+        'address' => 'required|string|max:255',
+        'mobile' => 'required|digits:9',
+        'postal_code' => 'required|digits:4',
+    ]);
+
+    if ($validator->fails()) {
+        Log::error('Registration validation failed', ['errors' => $validator->errors()]);
+        return response()->json($validator->errors(), 400);
     }
+
+    try {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'address' => $request->address,
+            'mobile' => $request->mobile,
+            'postal_code' => $request->postal_code,
+        ]);
+
+        // Create a token for the user
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json(['message' => 'User created successfully', 'user' => $user, 'token' => $token], 201);
+    } catch (\Exception $e) {
+        Log::error('Error occurred during user registration', ['exception' => $e]);
+        return response()->json(['message' => 'Error occurred during user registration'], 500);
+    }
+}
+
 }
 

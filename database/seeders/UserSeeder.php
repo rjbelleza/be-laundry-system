@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Faker\Factory as Faker;
 
 class UserSeeder extends Seeder
 {
@@ -14,19 +14,21 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        $faker = Faker::create();
+
         User::create([
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => Hash::make('password'),
-            'address' => '123 Main St, Anytown, USA', // Example address
-            'mobile' => 12345678901, // Example mobile number (11 digits)
-            'postal_code' => 123456, // Example postal code (5-6 digits)
+            'address' => '1091 zone 2 kauswagan cagayan de oro city',
+            'mobile' => 914678762,
+            'postal_code' => $faker->numberBetween(1000, 9999), // Generate 4-digit postal code
         ]);
 
         User::factory()->count(20)->create([
-            'address' => '123 Factory Rd, Factory Town, USA', // Default address for factory users
-            'mobile' => 98765432101, // Default mobile number for factory users
-            'postal_code' => 654321, // Default postal code for factory users
+            'address' => '27 North A San Miguel Street Camaman-an',
+            'mobile' => 926863278,
+            'postal_code' => $faker->numberBetween(1000, 9999), // Generate 4-digit postal code
         ]);
     }
 }
