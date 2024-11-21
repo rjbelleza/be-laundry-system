@@ -43,12 +43,14 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out'], 200);
     }
 
-    public function register(Request $request) 
-    { 
+    public function register(Request $request) { 
         $validator = Validator::make($request->all(), [ 
             'name' => 'required|string|max:255', 
             'email' => 'required|string|email|max:255|unique:users', 
             'password' => 'required|string|min:8', 
+            'address' => 'required|string|max:255', 
+            'mobile' => 'required|digits:11', // Validate exactly 11 digits 
+            'postal_code' => 'required|digits:11', // Validate exactly 11 digits 
         ]); 
         
         if ($validator->fails()) { 
@@ -61,13 +63,10 @@ class AuthController extends Controller
                 'name' => $request->name, 
                 'email' => $request->email, 
                 'password' => Hash::make($request->password), 
+                'address' => $request->address, 
+                'mobile' => $request->mobile, 
+                'postal_code' => $request->postal_code, 
             ]); 
-            
-            if ($user) { 
-                Log::info('User created successfully', ['user' => $user]); 
-            } else { 
-                Log::error('User creation failed', ['data' => $request->all()]); 
-            } 
             
             return response()->json(['message' => 'User created successfully', 'user' => $user], 201); 
         } catch (\Exception $e) { 
@@ -75,6 +74,5 @@ class AuthController extends Controller
             return response()->json(['message' => 'Error occurred during user registration'], 500); 
         } 
     }
-
 }
 
