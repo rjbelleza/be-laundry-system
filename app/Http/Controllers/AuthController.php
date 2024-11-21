@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -39,4 +42,39 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Logged out'], 200);
     }
+
+    public function register(Request $request) 
+    { 
+        $validator = Validator::make($request->all(), [ 
+            'name' => 'required|string|max:255', 
+            'email' => 'required|string|email|max:255|unique:users', 
+            'password' => 'required|string|min:8', 
+        ]); 
+        
+        if ($validator->fails()) { 
+            Log::error('Registration validation failed', ['errors' => $validator->errors()]); 
+            return response()->json($validator->errors(), 400); 
+        } 
+        
+        try { 
+            $user = User::create([ 
+                'name' => $request->name, 
+                'email' => $request->email, 
+                'password' => Hash::make($request->password), 
+            ]); 
+            
+            if ($user) { 
+                Log::info('User created successfully', ['user' => $user]); 
+            } else { 
+                Log::error('User creation failed', ['data' => $request->all()]); 
+            } 
+            
+            return response()->json(['message' => 'User created successfully', 'user' => $user], 201); 
+        } catch (\Exception $e) { 
+            Log::error('Error occurred during user registration', ['exception' => $e]); 
+            return response()->json(['message' => 'Error occurred during user registration'], 500); 
+        } 
+    }
+
 }
+
