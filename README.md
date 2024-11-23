@@ -1,4 +1,4 @@
-# Convenient Laundry System Backend
+# Laundry System Backend
 
 ## Description 
 This project is the backend for a laundry management system, built with Laravel 11. It provides RESTful APIs for managing customers, orders, and laundry services.
