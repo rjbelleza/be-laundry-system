@@ -15,8 +15,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/', [ServiceController::class, 'index']);
-Route::post('/', [OrderController::class, 'store']);
+Route::get('/services', [ServiceController::class, 'index']);
+Route::post('/orders', [OrderController::class, 'store']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', function () {
