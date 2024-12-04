@@ -20,9 +20,20 @@ class UserSeeder extends Seeder
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => Hash::make('password'),
+            'role' => 'admin', 
             'address' => '1091 zone 2 kauswagan cagayan de oro city',
             'mobile' => 914678762,
             'postal_code' => $faker->numberBetween(1000, 9999), // Generate 4-digit postal code
+        ]);
+
+        User::create([ 
+            'name' => 'Customer User', 
+            'email' => 'customer@example.com', 
+            'password' => Hash::make('password'), 
+            'role' => 'customer', 
+            'address' => 'Customer Address', 
+            'mobile' => '987654321', 
+            'postal_code' => '4321', 
         ]);
 
         User::factory()->count(20)->create([
