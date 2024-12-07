@@ -10,8 +10,10 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('service_id'); // Correct foreign key type
-            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade'); // Foreign key constraint
+            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade'); 
             $table->integer('baskets');
             $table->string('address');
             $table->integer('postal_code');
