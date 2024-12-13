@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\UserController;
 
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -22,7 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
             return \App\Models\User::paginate(10);
         });
 
-        Route::put('/users/{id}/role', [UserController::class, 'updateRole']);
+        Route::put('/users/{id}/role', [UserController::class, 'updateRole']);        
         Route::get('/user', function (Request $request) {
             return $request->user();
         });

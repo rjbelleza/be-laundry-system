@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use app\Models\User;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -22,21 +22,18 @@ class UserController extends Controller
 
     public function updateRole(Request $request, $id)
     {
-        $user = User::find($id);
-
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404); 
-        }
-
-        $user->role = $request->input('role');
-        $user->save();
-
-        return response()->json(['message' => 'User role updated successfully', 'user' => $user], 200);
+            $user = User::find($id); 
+            
+            if (!$user) { 
+                return response()->json(['message' => 'User not found'], 404); 
+            } 
+            
+            $user->role = $request->input('role'); 
+            $user->save(); 
+            
+            return response()->json(['message' => 'User role updated successfully', 'user' => $user], 200); 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
