@@ -20,6 +20,7 @@ class UserController extends Controller
 
     }
 
+
     public function destroy($id) { 
         $user = User::find($id); 
 
@@ -30,6 +31,7 @@ class UserController extends Controller
         $user->delete(); 
         return response()->json(['message' => 'User deleted successfully'], 200); 
     }
+
 
     public function updateRole(Request $request, $id)
     {
@@ -82,11 +84,5 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }
+
