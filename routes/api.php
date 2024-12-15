@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Admin-specific routes
     Route::middleware('role:admin')->group(function () {
         Route::get('/users', function () {
-            return \App\Models\User::paginate(10);
+            return \App\Models\User::all();
         });
 
         Route::put('/users/{id}/role', [UserController::class, 'updateRole']);    
