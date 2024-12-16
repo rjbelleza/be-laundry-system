@@ -104,4 +104,23 @@ class OrderController extends Controller
             return response()->json(['message' => 'Error deleting order', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function cancel($id)
+{
+    try {
+        $order = Order::findOrFail($id);
+
+        if ($order->status !== 'pending') {
+            return response()->json(['message' => 'Only pending orders can be canceled'], 403);
+        }
+
+        $order->status = 'cancelled';
+        $order->save();
+
+        return response()->json(['message' => 'Order cancelled successfully', 'order' => $order], 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Error cancelling order', 'error' => $e->getMessage()], 500);
+    }
+}
+
 }
