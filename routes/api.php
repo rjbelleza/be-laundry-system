@@ -11,7 +11,6 @@ use App\Http\Controllers\UserController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/services', [ServiceController::class, 'index']);
-Route::post('/orders', [OrderController::class, 'store']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -32,6 +31,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Customer-specific routes
     Route::middleware('role:customer')->group(function () {
-        
+        Route::post('/orders', [OrderController::class, 'store']);
     });
 });
