@@ -17,7 +17,8 @@ class Order extends Model
         'postal_code', 
         'notes', 
         'payment_mode', 
-        'total_price'
+        'total_price',
+        'status',
     ];
 
     public function user()

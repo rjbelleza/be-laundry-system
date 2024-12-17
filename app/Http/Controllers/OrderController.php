@@ -12,11 +12,12 @@ class OrderController extends Controller
 {
     public function index()
     {
-        try {
-            $orders = Order::all();
-            return response()->json($orders);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error fetching orders', 'error' => $e->getMessage()], 500);
+        try { 
+            $user = Auth::user();  
+            $orders = Order::where('user_id', $user->id)->with('service')->get(); 
+            return response()->json($orders); 
+        } catch (\Exception $e) { 
+            return response()->json(['message' => 'Error fetching orders', 'error' => $e->getMessage()], 500); 
         }
     }
 
@@ -41,6 +42,7 @@ class OrderController extends Controller
 
             $validated['total_price'] = $totalPrice;
             $validated['user_id'] = $userId;
+            $validated['status'] = 'pending';
 
             $order = Order::create($validated);
             return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
@@ -81,6 +83,7 @@ class OrderController extends Controller
                 'baskets' => 'integer|min:1',
                 'address' => 'string|max:255',
                 'payment_mode' => 'in:cash,credit_card,paypal',
+                'status' => 'in:pending,confirmed,in_progress,ready_for_pickup,out_for_delivery,delivered,completed,cancelled,on_hold,failed',
             ]);
 
             $order = Order::findOrFail($id);
@@ -95,10 +98,36 @@ class OrderController extends Controller
     {
         try {
             $order = Order::findOrFail($id);
+
+            if ($order->status !== 'cancelled') { 
+                return response()->json(['message' => 'Only cancelled orders can be deleted'], 403); 
+            }
+
             $order->delete();
-            return response()->json(['message' => 'Order deleted successfully'], 204);
+
+            return response()->json(['message' => 'Order deleted successfully'], 200);
         } catch (\Exception $e) {
+            Log::error('Error deleting order: ' . $e->getMessage());
             return response()->json(['message' => 'Error deleting order', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function cancel($id)
+{
+    try {
+        $order = Order::findOrFail($id);
+
+        if ($order->status !== 'pending') {
+            return response()->json(['message' => 'Only pending orders can be canceled'], 403);
+        }
+
+        $order->status = 'cancelled';
+        $order->save();
+
+        return response()->json(['message' => 'Order cancelled successfully', 'order' => $order], 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Error cancelling order', 'error' => $e->getMessage()], 500);
+    }
+}
+
 }

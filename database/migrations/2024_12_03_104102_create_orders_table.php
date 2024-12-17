@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->text('notes')->nullable();
             $table->enum('payment_mode', ['cash', 'credit_card', 'paypal']);
             $table->decimal('total_price', 8, 2);
+            $table->enum('status', [ 'pending', 'confirmed', 'in_progress', 'ready_for_pickup', 'out_for_delivery', 'delivered', 'completed', 'cancelled', 'on_hold', 'failed' ])->default('pending');
             $table->timestamps();
         });
     }

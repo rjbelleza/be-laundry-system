@@ -32,5 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Customer-specific routes
     Route::middleware('role:customer')->group(function () {
         Route::post('/orders', [OrderController::class, 'store']);
+        Route::get('/orders', [OrderController::class, 'index']); 
+        Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancel']);
+        Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
     });
 });
