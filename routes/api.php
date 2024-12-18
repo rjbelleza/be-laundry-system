@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::put('/users/{id}/role', [UserController::class, 'updateRole']);    
         Route::delete('/users/{id}', [UserController::class, 'destroy']); 
+        Route::put('/services/{id}', [ServiceController::class, 'update']);
     });
 
     // Customer-specific routes
