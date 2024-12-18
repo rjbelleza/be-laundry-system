@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/users/{id}', [UserController::class, 'destroy']); 
         Route::put('/services/{id}', [ServiceController::class, 'update']);
         Route::post('/services', [ServiceController::class, 'store']);
+        Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
     });
 
     // Customer-specific routes

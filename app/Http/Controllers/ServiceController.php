@@ -48,4 +48,16 @@ class ServiceController extends Controller
         $service->price = $request->input('price'); 
         $service->save(); return response()->json($service, 201); 
     }
+
+    public function destroy($id)
+    {
+        $service = Service::find($id); 
+
+        if (!$service) { 
+            return response()->json(['message' => 'Service not found'], 404); 
+        } 
+
+        $service->delete(); 
+        return response()->json(['message' => 'Service deleted successfully'], 200); 
+    }
 }
