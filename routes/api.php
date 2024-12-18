@@ -17,10 +17,12 @@ Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEm
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 
-
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', function (Request $request) {
+        return $request->user();  
+    });
 
     // Admin-specific routes
     Route::middleware('role:admin')->group(function () {
@@ -29,10 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
         Route::put('/users/{id}/role', [UserController::class, 'updateRole']);    
-        Route::delete('/users/{id}', [UserController::class, 'destroy']);    
-        Route::get('/user', function (Request $request) {
-            return $request->user();
-        });
+        Route::delete('/users/{id}', [UserController::class, 'destroy']); 
     });
 
     // Customer-specific routes
