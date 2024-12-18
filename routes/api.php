@@ -29,10 +29,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/users', function () {
             return \App\Models\User::all();
         });
-
         Route::put('/users/{id}/role', [UserController::class, 'updateRole']);    
         Route::delete('/users/{id}', [UserController::class, 'destroy']); 
         Route::put('/services/{id}', [ServiceController::class, 'update']);
+        Route::post('/services', [ServiceController::class, 'store']);
     });
 
     // Customer-specific routes
