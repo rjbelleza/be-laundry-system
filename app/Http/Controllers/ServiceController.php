@@ -18,4 +18,19 @@ class ServiceController extends Controller
             return response()->json(['message' => 'Error fetching services'], 500);
         }
     }
+
+    public function update(Request $request, $id) 
+    { 
+        $service = Service::find($id); 
+        if (!$service) { 
+            return response()->json(['message' => 'Service not found'], 404); 
+        } 
+        
+        $service->name = $request->input('name'); 
+        $service->description = $request->input('description'); 
+        $service->price = $request->input('price'); 
+        $service->save(); 
+        
+        return response()->json($service); 
+    }
 }
