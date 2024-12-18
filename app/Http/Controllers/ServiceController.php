@@ -33,4 +33,19 @@ class ServiceController extends Controller
         
         return response()->json($service); 
     }
+
+    public function store(Request $request) 
+    { 
+        $request->validate([ 
+            'name' => 'required|string|max:255', 
+            'description' => 'required|string', 
+            'price' => 'required|numeric', 
+        ]); 
+        
+        $service = new Service(); 
+        $service->name = $request->input('name'); 
+        $service->description = $request->input('description'); 
+        $service->price = $request->input('price'); 
+        $service->save(); return response()->json($service, 201); 
+    }
 }
