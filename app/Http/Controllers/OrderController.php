@@ -21,6 +21,17 @@ class OrderController extends Controller
         }
     }
 
+    public function showAll()
+    {
+        try{
+            $orders = Order::with(['service', 'user'])->get();
+            return response()->json($orders);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching orders:', ['error' => $e->getMessage()]);
+            return response()->json(['message' => 'Error fetching orders'], 500);
+        }
+    }
+
     public function store(Request $request)
     {
         try {

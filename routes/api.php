@@ -34,13 +34,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/services/{id}', [ServiceController::class, 'update']);
         Route::post('/services', [ServiceController::class, 'store']);
         Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
+        Route::get('/fetchOrders', [OrderController::class, 'showAll']);
     });
 
     // Customer-specific routes
     Route::middleware('role:customer')->group(function () {
-        Route::post('/orders', [OrderController::class, 'store']);
-        Route::get('/orders', [OrderController::class, 'index']); 
+        Route::post('/orders', [OrderController::class, 'store']); 
         Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancel']);
         Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+        Route::get('/orders', [OrderController::class, 'index']);
     });
 });
