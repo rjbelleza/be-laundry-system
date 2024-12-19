@@ -104,6 +104,20 @@ class OrderController extends Controller
             return response()->json(['message' => 'Error updating order', 'error' => $e->getMessage()], 500);
         }
     }
+    
+    public function updateStatus(Request $request, $id)
+    {
+        $order = Order::find($id);
+
+        if (!$order) { 
+            return response()->json(['message' => 'Order not found'], 404); 
+        } 
+        
+        $order->status = $request->input('status'); 
+        $order->save(); 
+        
+        return response()->json(['message' => 'Order status updated successfully', 'order' => $order], 200);
+    }
 
     public function destroy($id)
     {
@@ -124,21 +138,20 @@ class OrderController extends Controller
     }
 
     public function cancel($id)
-{
-    try {
-        $order = Order::findOrFail($id);
+    {
+        try {
+            $order = Order::findOrFail($id);
 
-        if ($order->status !== 'pending') {
-            return response()->json(['message' => 'Only pending orders can be canceled'], 403);
+            if ($order->status !== 'pending') {
+                return response()->json(['message' => 'Only pending orders can be canceled'], 403);
+            }
+
+            $order->status = 'cancelled';
+            $order->save();
+
+            return response()->json(['message' => 'Order cancelled successfully', 'order' => $order], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error cancelling order', 'error' => $e->getMessage()], 500);
         }
-
-        $order->status = 'cancelled';
-        $order->save();
-
-        return response()->json(['message' => 'Order cancelled successfully', 'order' => $order], 200);
-    } catch (\Exception $e) {
-        return response()->json(['message' => 'Error cancelling order', 'error' => $e->getMessage()], 500);
     }
-}
-
 }

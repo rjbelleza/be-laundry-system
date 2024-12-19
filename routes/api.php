@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();  
     });
+    Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
 
     // Admin-specific routes
     Route::middleware('role:admin')->group(function () {
@@ -35,13 +36,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/services', [ServiceController::class, 'store']);
         Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
         Route::get('/fetchOrders', [OrderController::class, 'showAll']);
+        Route::put('/updateOrders/{id}/status', [OrderController::class, 'updateStatus']);
     });
 
     // Customer-specific routes
     Route::middleware('role:customer')->group(function () {
         Route::post('/orders', [OrderController::class, 'store']); 
         Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancel']);
-        Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
         Route::get('/orders', [OrderController::class, 'index']);
     });
 });
