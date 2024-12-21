@@ -19,8 +19,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable(); 
             $table->string('password'); 
             $table->string('address'); 
-            $table->unsignedBigInteger('mobile'); 
-            $table->unsignedInteger('postal_code'); 
+            $table->string('mobile'); 
+            $table->integer('postal_code');
             $table->rememberToken(); 
             $table->timestamps();
         });

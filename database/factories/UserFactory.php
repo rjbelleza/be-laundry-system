@@ -27,9 +27,25 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make('password'), // Consider making this dynamic
             'remember_token' => Str::random(10),
+            'address' => fake()->address(),
+            'mobile' => $this->generatePhilippineMobileNumber(), // Generate mobile number in Philippine format
+            'postal_code' => fake()->numberBetween(10000, 99999), // Ensure valid postal code range
         ];
+    }
+
+    /**
+     * Generate a random Philippine mobile number with 11 digits.
+     *
+     * @return string
+     */
+    private function generatePhilippineMobileNumber(): string
+    {
+        // Generate a random mobile number in the format 09XXXXXXXX
+        $prefix = '09'; // Standard prefix for Philippine mobile numbers
+        $number = $prefix . fake()->numberBetween(10000000, 99999999); // Generate 9 random digits
+        return $number;
     }
 
     /**
