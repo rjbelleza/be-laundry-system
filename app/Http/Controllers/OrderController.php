@@ -162,7 +162,7 @@ class OrderController extends Controller
     {
         // Validate the incoming request data
         $request->validate([
-            'courier_id' => 'required|exists:users,id'
+            'courier_id' => 'nullable|exists:users,id'
         ]);
 
         // Find the order by ID
@@ -172,12 +172,16 @@ class OrderController extends Controller
             return response()->json(['message' => 'Order not found'], 404);
         }
 
-        // Assign the courier to the order
-        Log::info('Request data:', $request->all());
-        $order->courier_id = $request->input('courier_id');
+        // Assign the courier to the order if `courier_id` is provided
+        if ($request->has('courier_id')) {
+            Log::info('Assigning courier:', ['courier_id' => $request->input('courier_id')]);
+            $order->courier_id = $request->input('courier_id');
+        }
+
         $order->save();
 
-        return response()->json(['message' => 'Order assigned to courier successfully', 'order' => $order], 200);
+        return response()->json(['message' => 'Order updated successfully', 'order' => $order], 200);
     }
+
 
 }

@@ -18,6 +18,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/services', [ServiceController::class, 'index']);
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+Route::get('/products', [ProductController::class, 'index']);
 
 
 // Protected routes
@@ -27,7 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();  
     });
     Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
-    Route::get('/products', [ProductController::class, 'index']);
 
     // Admin-specific routes
     Route::middleware('role:admin')->group(function () {
