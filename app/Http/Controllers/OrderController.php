@@ -157,4 +157,28 @@ class OrderController extends Controller
             return response()->json(['message' => 'Error cancelling order', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function assignCourier(Request $request, $id)
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'courier_id' => 'required|exists:users,id'
+        ]);
+
+        // Find the order by ID
+        $order = Order::find($id);
+
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+
+        // Assign the courier to the order
+        Log::info('Request data:', $request->all());
+        $order->courier_id = $request->input('courier_id');
+        $order->save();
+
+        return response()->json(['message' => 'Order assigned to courier successfully', 'order' => $order], 200);
+    }
+
+
 }
