@@ -16,10 +16,13 @@ class Order extends Model
         'baskets', 
         'address',
         'postal_code', 
+        'courier_id',
         'notes', 
         'payment_mode', 
         'total_price',
         'status',
+        'out_date',
+        'return_date',
     ];
 
     public function user()
@@ -35,6 +38,11 @@ class Order extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function courier()
+    {
+        return $this->belongsTo(User::class, 'courier_id');
     }
 
 }

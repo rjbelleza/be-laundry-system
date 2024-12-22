@@ -15,7 +15,7 @@ class OrderController extends Controller
     {
         try { 
             $user = Auth::user();  
-            $orders = Order::where('user_id', $user->id)->with(['service', 'product'])->get(); 
+            $orders = Order::where('user_id', $user->id)->with(['service', 'product', 'user'])->get(); 
             return response()->json($orders); 
         } catch (\Exception $e) { 
             return response()->json(['message' => 'Error fetching orders', 'error' => $e->getMessage()], 500); 

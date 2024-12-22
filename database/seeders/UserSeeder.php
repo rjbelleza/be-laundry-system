@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'), 
             'role' => 'customer', 
             'address' => 'Customer Address', 
-            'mobile' => 9876543210, 
+            'mobile' => $faker->numberBetween(1000000000, 9999999999),
             'postal_code' => 4321, 
         ]);
 
@@ -45,7 +45,17 @@ class UserSeeder extends Seeder
             'role' => 'courier',
             'password' => Hash::make('password'),
             'address' => '789 Courier Blvd', // Ensure this field is populated
-            'mobile' => 9267452781,
+            'mobile' => $faker->numberBetween(1000000000, 9999999999),
+            'postal_code' => 5432,
+        ]);
+
+        User::create([
+            'name' => 'Mr. Delivery Man',
+            'email' => 'deliveryman@example.com',
+            'role' => 'courier',
+            'password' => Hash::make('password'),
+            'address' => '100 Courier Town', 
+            'mobile' => $faker->numberBetween(1000000000, 9999999999),
             'postal_code' => 5432,
         ]);
 
@@ -53,7 +63,7 @@ class UserSeeder extends Seeder
         User::factory()->count(20)->create()->each(function ($user) use ($faker) {
             $user->update([
                 'address' => $faker->address, 
-                'mobile' => 9234627214,
+                'mobile' => $faker->numberBetween(1000000000, 9999999999),
                 'postal_code' => $faker->numberBetween(1000, 9999), 
             ]);
         });

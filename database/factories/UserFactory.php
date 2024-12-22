@@ -30,9 +30,9 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'), // Consider making this dynamic
             'remember_token' => Str::random(10),
             'address' => fake()->address(),
-            'mobile' => 9837463780,
+            'mobile' => fake()->unique()->numberBetween(1000000000, 9999999999),
             'postal_code' => fake()->numberBetween(1000, 9999),
-            'role' => 'user',
+            'role' => 'customer',
         ];
     }
 

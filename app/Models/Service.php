@@ -12,9 +12,5 @@ class Service extends Model
     protected $fillable = ['name', 'description', 'price'];
 
     protected $casts = [ 'price' => 'float', ];
-
-    public function products()
-    {
-        return $this->belongsToMany(Product::class, 'product_service');
-    }
+    
 }
