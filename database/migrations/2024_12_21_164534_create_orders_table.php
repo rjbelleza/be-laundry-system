@@ -12,8 +12,10 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('service_id'); // Correct foreign key type
+            $table->unsignedBigInteger('service_id');
             $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade'); 
+            $table->unsignedBigInteger('product_id'); // Add this line for product_id
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade'); // Foreign key for product_id
             $table->integer('baskets');
             $table->string('address');
             $table->integer('postal_code');

@@ -8,6 +8,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\ProductController;
 
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -24,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();  
     });
     Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+    Route::get('/products', [ProductController::class, 'index']);
 
     // Admin-specific routes
     Route::middleware('role:admin')->group(function () {

@@ -23,8 +23,8 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'admin', 
             'address' => '1091 zone 2 kauswagan cagayan de oro city',
-            'mobile' => '914678762', // Ensure mobile is a string
-            'postal_code' => $faker->numberBetween(1000, 9999), // Generate 4-digit postal code
+            'mobile' => $faker->numberBetween(1000000000, 9999999999), 
+            'postal_code' => $faker->numberBetween(1000, 9999), 
         ]);
 
         // Create a customer user
@@ -34,8 +34,8 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'), 
             'role' => 'customer', 
             'address' => 'Customer Address', 
-            'mobile' => '987654321', 
-            'postal_code' => '4321', 
+            'mobile' => 9876543210, 
+            'postal_code' => 4321, 
         ]);
 
         // Create a sample courier user
@@ -45,16 +45,16 @@ class UserSeeder extends Seeder
             'role' => 'courier',
             'password' => Hash::make('password'),
             'address' => '789 Courier Blvd', // Ensure this field is populated
-            'mobile' => '1234567890',
-            'postal_code' => '5432',
+            'mobile' => 9267452781,
+            'postal_code' => 5432,
         ]);
 
         // Create 20 random users using the factory
         User::factory()->count(20)->create()->each(function ($user) use ($faker) {
             $user->update([
-                'address' => $faker->address, // Ensure address is populated
-                'mobile' => $faker->phoneNumber, // Generate a random phone number
-                'postal_code' => $faker->numberBetween(1000, 9999), // Generate 4-digit postal code
+                'address' => $faker->address, 
+                'mobile' => 9234627214,
+                'postal_code' => $faker->numberBetween(1000, 9999), 
             ]);
         });
     }

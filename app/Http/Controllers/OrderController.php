@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
@@ -14,7 +15,7 @@ class OrderController extends Controller
     {
         try { 
             $user = Auth::user();  
-            $orders = Order::where('user_id', $user->id)->with('service')->get(); 
+            $orders = Order::where('user_id', $user->id)->with(['service', 'product'])->get(); 
             return response()->json($orders); 
         } catch (\Exception $e) { 
             return response()->json(['message' => 'Error fetching orders', 'error' => $e->getMessage()], 500); 
@@ -37,6 +38,7 @@ class OrderController extends Controller
         try {
             $validated = $request->validate([
                 'service_id' => 'required|exists:services,id',
+                'product_id' => 'required|exists:products,id',
                 'baskets' => 'required|integer|min:1',
                 'address' => 'required|string|max:255',
                 'postal_code' => 'required|string|max:10',
@@ -45,7 +47,8 @@ class OrderController extends Controller
             ]);
 
             $service = Service::findOrFail($request->service_id);
-            $totalPrice = $service->price * $request->baskets;
+            $product = Product::findOrFail($request->product_id);
+            $totalPrice = $product->price * $request->baskets + ($service->price * $request->baskets);
 
             // Get authenticated user's ID 
             $userId = Auth::id(); 
