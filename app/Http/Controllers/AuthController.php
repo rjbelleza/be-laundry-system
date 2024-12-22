@@ -14,33 +14,39 @@ class AuthController extends Controller
     // Login function
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-        Log::info('Login attempt', ['credentials' => $credentials]);
-
+        // Validate the incoming request data
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
+        Log::info('Login attempt', ['email' => $credentials['email']]);
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('auth_token')->plainTextToken;
-            Log::info('User authenticated', ['user' => $user]);
+
+            Log::info('User authenticated', ['user_id' => $user->id]);
 
             // Role-based redirection
-            if ($user->role == 'admin') {
-                return response()->json(['message' => 'Login successful', 'role' => 'admin', 'token' => $token], 200);
-            } elseif ($user->role == 'customer') {
-                return response()->json(['message' => 'Login successful', 'role' => 'customer', 'token' => $token], 200);
-            }
+            $role = $user->role;
+            $roleMap = [
+                'admin' => 'admin',
+                'customer' => 'customer',
+                'courier' => 'courier'
+            ];
 
-            // Default redirection if role is not matched
-            return response()->json(['message' => 'Login successful', 'role' => 'unknown', 'token' => $token], 200);
+            return response()->json([
+                'message' => 'Login successful',
+                'role' => $roleMap[$role] ?? 'unknown',
+                'token' => $token
+            ], 200);
         }
 
-        Log::warning('Invalid login attempt', ['credentials' => $credentials]);
+        Log::warning('Invalid login attempt', ['email' => $credentials['email']]);
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
+
 
     // Logout function
     public function logout(Request $request)

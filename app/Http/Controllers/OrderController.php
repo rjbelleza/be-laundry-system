@@ -180,5 +180,4 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order assigned to courier successfully', 'order' => $order], 200);
     }
 
-
 }

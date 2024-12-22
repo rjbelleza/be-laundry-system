@@ -9,6 +9,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CourierController;
+
 
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -47,5 +49,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/orders', [OrderController::class, 'store']); 
         Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancel']);
         Route::get('/orders', [OrderController::class, 'index']);
+    });
+
+    // Courier-specific routes
+    Route::middleware('role:courier')->group(function () {
+        Route::get('/orders/courier', [CourierController::class, 'courierOrders']);
+        Route::put('/orders/{id}/courier', [CourierController::class, 'updateOrderStatus']);
     });
 });

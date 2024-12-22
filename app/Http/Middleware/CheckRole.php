@@ -11,15 +11,24 @@ class CheckRole
     public function handle(Request $request, Closure $next, ...$roles)
     {
         if (!Auth::check()) {
-            return redirect('/login'); // Redirect to login if not authenticated
+            return $this->respondWithRedirect($request, '/login', 'Unauthorized access. Please log in.');
         }
 
         $user = Auth::user();
 
         if (!in_array($user->role, $roles)) {
-            return redirect('/'); // Redirect to home if role not permitted
+            return $this->respondWithRedirect($request, '/', 'Forbidden: You do not have the required permissions.');
         }
 
         return $next($request);
+    }
+
+    private function respondWithRedirect($request, $redirectUrl, $message)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['message' => $message], 403);
+        }
+
+        return redirect($redirectUrl)->withErrors($message);
     }
 }
