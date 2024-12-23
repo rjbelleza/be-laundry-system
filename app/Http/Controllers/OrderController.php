@@ -127,8 +127,8 @@ class OrderController extends Controller
         try {
             $order = Order::findOrFail($id);
 
-            if ($order->status !== 'cancelled') { 
-                return response()->json(['message' => 'Only cancelled orders can be deleted'], 403); 
+            if ($order->status !== 'cancelled' && $order->status !== 'completed') { 
+                return response()->json(['message' => 'Only cancelled and completed orders can be deleted'], 403); 
             }
 
             $order->delete();
